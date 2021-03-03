@@ -14,4 +14,11 @@ export default {
 </script>
 
 <style>
+
+.content {
+  width: 100%;
+  position: relative;
+  margin-top: 75px;
+}
+
 </style>

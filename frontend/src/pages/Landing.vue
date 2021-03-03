@@ -19,7 +19,7 @@
 // import Api from "../api";
 
 export default {
-  name: "Home",
+  name: "Landing",
   data: function () {
     return {
 
