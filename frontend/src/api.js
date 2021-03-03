@@ -1,7 +1,7 @@
 import axios from "axios";
 import { authHeader, getJwtToken, getUserIdFromToken } from "./auth";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "http://192.168.50.64:3000";
 
 class Api {
   getArticles() {
@@ -52,12 +52,23 @@ class Api {
     );
   }
 
-  login(email, password) {
-    return axios.post(API_URL + "/rpc/login", { email, password });
+  login(username, password) {
+    return axios.post(API_URL + "/rpc/login", 
+    { 
+        'username': username,
+        'upassword': password
+    });
   }
 
-  signup(email, password, name) {
-    return axios.post(API_URL + "/rpc/signup", { email, password, name });
+  signup(username, password, name) {
+    return axios.post(API_URL + "/rpc/signup", 
+      { 
+        'username': username,
+        'password': password,
+        'name': name,
+        'role': 1 
+      }
+    );
   }
 }
 

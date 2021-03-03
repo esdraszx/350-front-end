@@ -1,37 +1,38 @@
 <template>
-  <div>
-    <b-jumbotron>
-      <p>Welcome to the IT350 blog!</p>
-    </b-jumbotron>
-    <br />
-    <div v-if="loading">Loading articles....</div>
-    <ul v-else>
-      <li v-for="article in articles" :key="article.articleid">
-        <router-link :to="`article/${article.articleid}`">{{
-          article.title
-        }}</router-link>
-      </li>
-    </ul>
-  </div>
+    <div>
+        <div v-if="username !== ''">
+            <p>Home page for {{ username }}</p>
+            <p>Here we need to have a way to access the fridge and the pantry</p>
+        </div>
+        <div v-else>This page cannot be accessed without authentication</div>
+    </div>
 </template>
 
 <script>
-import Api from "../api";
+// import Api from "../api";
+import { getJwtToken, getUserIdFromToken } from "../auth";
 
 export default {
-  name: "Home",
-  data: function () {
+  name: "Login",
+  data() {
     return {
-      loading: false,
-      articles: [],
+        username: '',
     };
   },
-  created: function () {
-    this.loading = true;
-    Api.getArticles().then((res) => {
-      this.articles = res.data;
-      this.loading = false;
-    });
+  methods: {
+    
+  },
+  created: function(){
+      let token = getJwtToken()
+      if(token === null){
+          return;
+      }
+
+      this.username = getUserIdFromToken(token)
   },
 };
 </script>
+
+<style scoped>
+
+</style>

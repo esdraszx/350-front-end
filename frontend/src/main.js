@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 
 import App from "./App.vue";
+import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
@@ -38,7 +39,8 @@ const checkAuth = function(to, _, next) {
 
 const router = new VueRouter({
   routes: [
-    { path: "/", component: Home },
+    { path: "/", component: Landing },
+    { path: "/home", component: Home },
     { path: "/article/:id", component: Article },
     { path: "/login", component: Login },
     { path: "/logout", component: Logout },

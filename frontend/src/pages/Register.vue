@@ -18,12 +18,12 @@
             />
           </div>
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="username">username</label>
             <input
-              v-model="email"
-              type="email"
+              v-model="username"
+              type="username"
               class="form-control"
-              name="email"
+              name="username"
             />
           </div>
           <div class="form-group">
@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       name: "",
-      email: "",
+      username: "",
       password: "",
       loading: false,
       message: "",
@@ -72,7 +72,7 @@ export default {
       this.message = "";
       this.loading = true;
 
-      Api.signup(this.email, this.password, this.name)
+      Api.signup(this.username, this.password, this.name)
         .then(() => {
           this.$router.push("/login");
         })

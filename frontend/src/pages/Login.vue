@@ -8,12 +8,12 @@
       />
       <form name="form" @submit.prevent="handleLogin">
         <div class="form-group">
-          <label for="email">Email</label>
+          <label for="username">Username</label>
           <input
-            v-model="email"
+            v-model="username"
             type="text"
             class="form-control"
-            name="email"
+            name="username"
           />
         </div>
         <div class="form-group">
@@ -52,7 +52,7 @@ export default {
   name: "Login",
   data() {
     return {
-      email: "",
+      username: "",
       password: "",
       loading: false,
       message: "",
@@ -62,14 +62,10 @@ export default {
     handleLogin() {
       this.loading = true;
       this.message = "";
-      Api.login(this.email, this.password)
+      Api.login(this.username, this.password)
         .then((res) => {
           setJwtToken(res.data[0].token);
-          if (this.$route.params.nextUrl != null) {
-            this.$router.push(this.$route.params.nextUrl);
-          } else {
-            this.$router.push("/admin");
-          }
+          this.$router.push("/home");
         })
         .catch((error) => {
           console.log(error);
