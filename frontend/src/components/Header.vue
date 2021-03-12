@@ -2,13 +2,15 @@
   <div id="header">
     <div id="header-container">
         <div id="logo">
-            XX
+            <router-link :to="`/`" v-if="isLogin === false">Landing</router-link>
+            <router-link :to="`/home`" v-else>Home</router-link>
         </div>
         <div id="menu">
             <ul>
-                <li><router-link :to="`home`">Home</router-link></li>
+                <!-- <li v-if="isLogin"><router-link :to="`home`">Home</router-link></li> -->
                 <!-- <li><router-link :to="`recipes`">Recipes</router-link></li> -->
-                <li><router-link :to="`logout`">Logout</router-link></li>
+                <li v-if="isLogin"><router-link :to="`logout`" >Logout</router-link></li>
+                <li v-else><router-link :to="`login`" >Login</router-link></li>
                 <li id="last" v-if="isAdmin"><router-link :to="`admin`">Admin</router-link></li>
             </ul>
         </div>
@@ -18,18 +20,36 @@
 
 <script>
 // import Api from "../api";
+import { getRolePermissions, getJwtToken } from '../auth'
 
 export default {
   name: "Header",
   data: function () {
     return {
         isAdmin: false,
+        isLogin: false,
     };
   },
-  methods: {
-      checkIsAdmin(){
-        
-      },
+  methods:{
+  },
+  created: function(){
+      let token = getJwtToken()
+      if(!token){
+        this.isLogin = false
+        return;
+      }
+      else {
+        this.isLogin = true
+      }
+      
+      let rights = getRolePermissions(token)
+
+      if(rights === 'admins'){
+        this.isAdmin = true
+      }
+      else {
+        this.isAdmin = false
+      }
   },
 };
 </script>
@@ -78,12 +98,13 @@ export default {
     list-style: none;
 }
 
+a {
+    font-size: 17px !important;
+}
+
 #last {
     margin-right: 0px !important;
 }
 
-a {
-    color: black !important;
-}
 
 </style>

@@ -1,5 +1,7 @@
 <template>
   <div class="col-md-12">
+    <Header/>
+    <br/>
     <div class="card card-container">
       <img
         id="profile-img"
@@ -47,6 +49,7 @@
 <script>
 import Api from "../api";
 import { setJwtToken } from "../auth";
+import Header from "../components/Header"
 
 export default {
   name: "Login",
@@ -57,6 +60,9 @@ export default {
       loading: false,
       message: "",
     };
+  },
+  components: {
+    Header
   },
   methods: {
     handleLogin() {
@@ -86,6 +92,7 @@ label {
 }
 
 .card-container.card {
+  margin-top: 75px;
   max-width: 350px !important;
   padding: 40px 40px;
 }

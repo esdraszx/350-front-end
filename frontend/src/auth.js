@@ -6,8 +6,14 @@ export function getJwtToken() {
 
 export function getUserIdFromToken(token) {
   const decoded = jwt_decode(token);
-  console.log(decoded);
+  // console.log(decoded);
   return decoded.username;
+}
+
+export function getRolePermissions(token) {
+  const decoded = jwt_decode(token);
+  // console.log(decoded);
+  return decoded.role;
 }
 
 export function setJwtToken(token) {

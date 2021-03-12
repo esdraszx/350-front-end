@@ -1,22 +1,19 @@
 <template>
   <div>
-    <b-jumbotron>
-      <p>Kitchen Inventory</p>
-    </b-jumbotron>
+    <Header/>
     <br />
-    <ul>
-      <li>
-        <router-link :to="`login`">Login</router-link>
-      </li>
-      <li>
-        <router-link :to="`register`">Register</router-link>
-      </li>
-    </ul>
+    <div class="content">
+      <div id="main-buttons">
+        <router-link :to="`login`"><button>Login</button></router-link>
+        <router-link :to="`register`"><button>Register</button></router-link>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 // import Api from "../api";
+import Header from "../components/Header"
 
 export default {
   name: "Landing",
@@ -24,6 +21,9 @@ export default {
     return {
 
     };
+  },
+  components: {
+    Header
   },
   created: function () {
     // this.loading = true;
@@ -34,3 +34,24 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+#main-buttons {
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+button {
+  width: 160px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px;
+}
+
+</style>

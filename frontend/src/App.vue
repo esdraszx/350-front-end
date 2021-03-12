@@ -21,4 +21,13 @@ export default {
   margin-top: 75px;
 }
 
+ul li {
+  list-style: none;
+}
+
+
+a {
+    color: black !important;
+}
+
 </style>

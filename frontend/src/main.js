@@ -9,7 +9,7 @@ import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Register from "./pages/Register";
-import Article from "./pages/Article";
+import NotFound from "./components/NotFound"
 import AdminArticleAdd from "./components/AdminArticleAdd";
 import AdminArticleList from "./components/AdminArticleList";
 import AdminArticleEdit from "./components/AdminArticleEdit";
@@ -40,8 +40,7 @@ const checkAuth = function(to, _, next) {
 const router = new VueRouter({
   routes: [
     { path: "/", component: Landing },
-    { path: "/home", component: Home },
-    { path: "/article/:id", component: Article },
+    { path: "/home", component: Home, beforeEnter: checkAuth },
     { path: "/login", component: Login },
     { path: "/logout", component: Logout },
     { path: "/register", component: Register },
@@ -55,6 +54,7 @@ const router = new VueRouter({
         { path: "", component: AdminArticleList },
       ],
     },
+    { path: '*', component: NotFound }
   ],
 });
 

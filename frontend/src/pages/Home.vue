@@ -1,79 +1,210 @@
 <template>
-    <div>
-        <Header></Header>
-        <div class="content">
-            <div v-if="username !== ''">
-                <p>Home page for {{ username }}</p>
-                <p>Here we need to have a way to access the fridge and the pantry</p>
-                <div id="inventory-container">
-                    <div id="fridge">
-                        <h4>Fridge <span class="add-button">+</span></h4>
-                        <p> Fridge table
-                        </p>
-                    </div>
-                    <div id="pantry">
-                        <h4>Pantry <span class="add-button">+</span></h4>
-                        <p> Pantry table
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div v-else>This page cannot be accessed without authentication</div>
-        </div>
-    </div>
+	<div>
+		<Header></Header>
+		<div class="content">
+			<div v-if="username !== ''">
+				<br/><br/>
+				<div id="inventory-container">
+					<div id="fridge">
+						<h4>Fridge {{fridgeid}}<button class="add-button" @click="isFridgeModal = true">+</button></h4>
+						<table>
+							<thead>
+								<tr>
+									<th width="5%">&nbsp;</th>
+									<th>Name</th>
+									<th>Type</th>
+									<th>Date</th>
+									<th>Weight</th>
+									<th width="5%">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="(item, index) in fridgeData" :key="index">
+									<td><input type="checkbox"></td>
+									<td>{{ item.name }}</td>
+									<td>{{ item.type !== null ? (item.type) : ('-')}}</td>
+									<td>{{ item.date }}</td>
+									<td>{{ item.weight }}</td>
+									<td><img @click="deleteItem(item)" src="../assets/trash.svg" height="20" width="20"/></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div id="pantry">
+						<h4>Pantry {{pantryid}}<button class="add-button" @click="isPantryModal = true">+</button></h4>
+						<table>
+							<thead>
+								<tr>
+									<th width="5%">&nbsp;</th>
+									<th>Name</th>
+									<th>Type</th>
+									<th>Date</th>
+									<th>Weight</th>
+									<th width="5%">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="(item, index) in pantryData" :key="index">
+									<td><input type="checkbox"></td>
+									<td>{{ item.name }}</td>
+									<td>{{ item.type !== null ? (item.type) : ('-')}}</td>
+									<td>{{ item.date }}</td>
+									<td>{{ item.weight }}</td>
+									<td><img @click="deleteItem(item)" src="../assets/trash.svg" height="20" width="20"/></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<PantryModal v-show="isPantryModal" @close="closeModal" v-bind:id="pantryid"></PantryModal>
+				<FridgeModal v-show="isFridgeModal" @close="closeModal" v-bind:id="fridgeid"></FridgeModal>
+			</div>
+			<div v-else>This page cannot be accessed without authentication</div>
+		</div>
+	</div>
 </template>
 
 <script>
-// import Api from "../api";
+import Api from "../api";
 import { getJwtToken, getUserIdFromToken } from "../auth";
 import Header from "../components/Header"
+import PantryModal from "../components/AddToPantry"
+import FridgeModal from "../components/AddToFridge"
 
 export default {
-  name: "Home",
-  data() {
-    return {
-        username: '',
-    };
-  },
-  components: {
-    Header: Header,
-  },
-  methods: {
-    
-  },
-  created: function(){
-      let token = getJwtToken()
-      if(token === null){
-          return;
-      }
+	name: "Home",
+	data() {
+		return {
+				username: '',
+				loading: false,
+				fridgeid: null,
+				pantryid: null,
+				fridgeData: [],
+				pantryData: [],
+				shouldUpdate: false,
+				isPantryModal: false,
+				isFridgeModal: false,
+		};
+	},
+	components: {
+		Header,
+		PantryModal,
+		FridgeModal
+	},
+	methods: {
+		async getKitchenData(){
+			// this.fridgeData = null
+			// this.pantryData = null
+			console.log('getting new data')
+			//get fridge fv and meats
+			let fridgeFvData = await Api.getFridgeFV(this.fridgeid)
+			let fridgeMData = await Api.getFridgeMeats(this.fridgeid)
+			// console.log(fridgeFvData)
+			this.fridgeData = [...fridgeFvData.data, ...fridgeMData.data]
 
-      this.username = getUserIdFromToken(token)
-  },
+			let pantryFvData = await Api.getPantryFV(this.pantryid)
+			let pantryGoData = await Api.getPantryGO(this.pantryid)
+			
+			this.pantryData = [...pantryFvData.data, ...pantryGoData.data]
+		},
+		closeModal(){
+			this.isPantryModal = false
+			this.isFridgeModal = false
+			
+			setTimeout(() => {
+				this.getKitchenData()
+			}, 750);
+		},
+		async deleteItem(item){
+			//get FV and GO and M
+			//find the item in one of those three. Word case scenario is going to make 3 calls and then a delete call
+			let response = await Api.getFVById(item.id)
+			if(response.data[0] !== undefined && response.data[0].name === item.name){
+				//I found it
+				console.log(response.data[0], 'belongs to FV')
+				await Api.deleteFV(item.id)
+				this.closeModal()
+				return;
+			}
+			
+			response = await Api.getGOById(item.id)
+			if(response.data[0] !== undefined && response.data[0].name === item.name){
+				console.log(response.data[0], 'belongs to GO')
+				await Api.deleteGO(item.id)
+				this.closeModal()
+				return;
+			}
+			
+			response = await Api.getMById(item.id)
+			if(response.data[0] !== undefined && response.data[0].name === item.name){
+				console.log(response.data[0], 'belongs to M')
+				await Api.deleteMeats(item.id)
+				this.closeModal()
+				return;
+			}
+		},
+	},
+	mounted: async function(){
+			let token = getJwtToken()
+			if(token === null){
+					return;
+			}
+
+			this.username = getUserIdFromToken(token)
+			while(this.username == ''){
+					this.loading = true
+			}
+
+			let response = await Api.getUserFridgeAndPantry(this.username)
+			// console.log(response)
+			this.fridgeid = response.data[0].fridge_id
+			this.pantryid = response.data[0].pantry_id
+
+			this.getKitchenData()
+	},
 };
 </script>
 
 <style scoped>
 
 div {
-    width: 100%;
+		width: 100%;
+}
+
+#fridge {
+	border-right: 1px solid black;
+	padding-right: 10px;
+}
+
+#pantry {
+	padding-left: 10px;
 }
 
 #inventory-container {
-    display: flex;
+		display: flex;
 }
 
 h4 {
-    display: flex;
-    position: relative;
+		display: flex;
+		position: relative;
 }
 
 .add-button {
-    position: absolute;
-    right: 2%;
+		position: absolute;
+		right: 2%;
 }
 
-* {
-    border: black 1px solid;
+table {
+	width: 100%;
 }
+
+td {
+	vertical-align: center;
+	border-bottom: 1px solid red;
+}
+
+/* * {
+		border: black 1px solid;
+} */
 
 </style>

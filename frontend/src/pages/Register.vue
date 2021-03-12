@@ -1,5 +1,7 @@
 <template>
   <div class="col-md-12">
+    <Header/>
+    <br/>
     <div class="card card-container">
       <img
         id="profile-img"
@@ -18,7 +20,7 @@
             />
           </div>
           <div class="form-group">
-            <label for="username">username</label>
+            <label for="username">Username</label>
             <input
               v-model="username"
               type="username"
@@ -56,6 +58,8 @@
 
 <script>
 import Api from "../api";
+import Header from "../components/Header"
+
 export default {
   name: "Register",
   data() {
@@ -66,6 +70,9 @@ export default {
       loading: false,
       message: "",
     };
+  },
+  components: {
+    Header
   },
   methods: {
     handleRegister() {
@@ -95,6 +102,7 @@ label {
 }
 
 .card-container.card {
+  margin-top: 75px;
   max-width: 350px !important;
   padding: 40px 40px;
 }

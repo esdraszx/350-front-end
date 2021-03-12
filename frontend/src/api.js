@@ -4,12 +4,75 @@ import { authHeader, getJwtToken, getUserIdFromToken } from "./auth";
 const API_URL = "http://192.168.50.64:3000";
 
 class Api {
-  getArticles() {
-    return axios.get(API_URL + "/articles", {});
+  getUserFridgeAndPantry(username) {
+    return axios.get(API_URL + `/user_kitchen_list?username=eq.${username}`);
   }
 
-  getArticleDetail(id) {
-    return axios.get(API_URL + `/articles?articleid=eq.${id}`);
+  getFridgeFV(fridgeid){
+    return axios.get(API_URL + `/fruits_vegetables?fridgeid=eq.${fridgeid}`);
+  }
+
+  getFridgeMeats(fridgeid){
+    return axios.get(API_URL + `/meats?fridgeid=eq.${fridgeid}`);
+  }
+
+  getPantryFV(pantryid){
+    return axios.get(API_URL + `/fruits_vegetables?pantryid=eq.${pantryid}`);
+  }
+
+  getPantryGO(pantryid){
+    return axios.get(API_URL + `/grains_other?pantryid=eq.${pantryid}`);
+  }
+
+  getFVById(id){
+    return axios.get(API_URL + `/fruits_vegetables?id=eq.${id}`);
+  }
+
+  getGOById(id){
+    return axios.get(API_URL + `/grains_other?id=eq.${id}`);
+  }
+
+  getMById(id){
+    return axios.get(API_URL + `/meats?id=eq.${id}`);
+  }
+
+  addFV(item){
+    axios.post(API_URL + '/fruits_vegetables', item,
+    {
+      headers: authHeader(),
+    })
+  }
+
+  addMeat(item){
+    axios.post(API_URL + '/meats', item,
+    {
+      headers: authHeader(),
+    })
+  }
+
+  addGO(item){
+    axios.post(API_URL + '/grains_other', item,
+    {
+      headers: authHeader(),
+    })
+  }
+
+  deleteFV(id){
+    axios.delete(API_URL + `/fruits_vegetables?id=eq.${id}`, {
+      headers: authHeader(),
+    })
+  }
+
+  deleteMeats(id){
+    axios.delete(API_URL + `/meats?id=eq.${id}`, {
+      headers: authHeader(),
+    })
+  }
+
+  deleteGO(id){
+    axios.delete(API_URL + `/grains_other?id=eq.${id}`, {
+      headers: authHeader(),
+    })
   }
 
   addArticle(article) {
@@ -53,7 +116,7 @@ class Api {
   }
 
   login(username, password) {
-    return axios.post(API_URL + "/rpc/login", 
+    return axios.post(API_URL + "/rpc/login_admin", 
     { 
         'username': username,
         'upassword': password
