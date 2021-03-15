@@ -35,10 +35,12 @@
               type="password"
               class="form-control"
               name="password"
+              @input="checkPassword"
+              @change="checkPassword" 
             />
           </div>
           <div class="form-group">
-            <button class="btn btn-primary btn-block" :disabled="loading">
+            <button type="button" @click="handleRegister()" class="btn btn-primary btn-block" :disabled="isValidPassword === false || name === '' || username === ''">
               <span
                 v-show="loading"
                 class="spinner-border spinner-border-sm"
@@ -49,9 +51,13 @@
         </div>
       </form>
 
-      <div v-if="message" class="alert alert-danger">
+      <div v-if="!isValidPassword && message" class="alert alert-danger">
         {{ message }}
       </div>
+      <div v-else-if="isValidPassword && message" class="alert alert-success">
+        {{ message }}
+      </div>
+      
     </div>
   </div>
 </template>
@@ -69,6 +75,7 @@ export default {
       password: "",
       loading: false,
       message: "",
+      isValidPassword: false
     };
   },
   components: {
@@ -78,6 +85,12 @@ export default {
     handleRegister() {
       this.message = "";
       this.loading = true;
+
+      if(this.isValidPassword !== true){
+        this.loading = false
+        this.message = "Password requirements are at least 8 characters. And, at least 1 number and 1 upper case letter"
+        return;
+      }
 
       Api.signup(this.username, this.password, this.name)
         .then(() => {
@@ -91,6 +104,41 @@ export default {
           this.loading = false;
         });
     },
+    checkPassword(){
+      console.log('checking password')
+      let hasNumber = false
+      let hasUpper = false
+      let hasLower = false
+      let str = this.password
+      for(let i = 0; i < str.length; i++){
+        if(/[^0-9]/.test(str.charAt(i))){
+          //not a number
+          if(/[^A-Z]/.test(str.charAt(i))){
+            //not an upper
+            hasLower = true
+          }
+          else {
+            //found upper
+            hasUpper = true
+          }
+        }
+        else {
+          //found a number
+          hasNumber = true
+        }
+      }
+
+      if(!(hasNumber && hasUpper && hasLower && str.length > 7)){
+        this.isValidPassword = false
+        this.loading = false
+        this.message = "Password requirements are at least 8 characters. And, at least 1 number and 1 upper case letter"
+        return;
+      }
+      else {
+        this.isValidPassword = true
+        this.message = "Good Password"
+      }
+    }
   },
 };
 </script>
@@ -128,5 +176,10 @@ label {
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
+}
+
+.alert-success {
+  background-color: rgb(158, 233, 158);
+  color: green;
 }
 </style>

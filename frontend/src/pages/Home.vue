@@ -6,50 +6,50 @@
 				<br/><br/>
 				<div id="inventory-container">
 					<div id="fridge">
-						<h4>Fridge {{fridgeid}}<button class="add-button" @click="isFridgeModal = true">+</button></h4>
+						<h4>Fridge<img src="../assets/add.svg" class="add-button" @click="isFridgeModal = true"/></h4>
 						<table>
 							<thead>
 								<tr>
 									<th width="5%">&nbsp;</th>
-									<th>Name</th>
+									<th>Name &nbsp;<img src="../assets/sort.svg" height="10" width="10" @click="sortBy('name', 'f')"/></th>
 									<th>Type</th>
-									<th>Date</th>
+									<th>Date &nbsp;<img src="../assets/sort.svg" height="10" width="10" @click="sortBy('date', 'f')"/></th>
 									<th>Weight</th>
 									<th width="5%">&nbsp;</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr v-for="(item, index) in fridgeData" :key="index">
-									<td><input type="checkbox"></td>
+									<td><input type="checkbox" :value="item.name" @change="selected($event)"></td>
 									<td>{{ item.name }}</td>
 									<td>{{ item.type !== null ? (item.type) : ('-')}}</td>
 									<td>{{ item.date }}</td>
-									<td>{{ item.weight }}</td>
+									<td>{{ item.weight }} lbs</td>
 									<td><img @click="deleteItem(item)" src="../assets/trash.svg" height="20" width="20"/></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
 					<div id="pantry">
-						<h4>Pantry {{pantryid}}<button class="add-button" @click="isPantryModal = true">+</button></h4>
+						<h4>Pantry<img src="../assets/add.svg" class="add-button" @click="isPantryModal = true"/></h4>
 						<table>
 							<thead>
 								<tr>
 									<th width="5%">&nbsp;</th>
-									<th>Name</th>
+									<th>Name &nbsp;<img src="../assets/sort.svg" height="10" width="10" @click="sortBy('name', 'p')"/></th>
 									<th>Type</th>
-									<th>Date</th>
+									<th>Date &nbsp;<img src="../assets/sort.svg" height="10" width="10" @click="sortBy('date', 'p')"/></th>
 									<th>Weight</th>
 									<th width="5%">&nbsp;</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr v-for="(item, index) in pantryData" :key="index">
-									<td><input type="checkbox"></td>
+									<td><input type="checkbox" :value="item.name" @change="selected($event)"></td>
 									<td>{{ item.name }}</td>
 									<td>{{ item.type !== null ? (item.type) : ('-')}}</td>
 									<td>{{ item.date }}</td>
-									<td>{{ item.weight }}</td>
+									<td>{{ item.weight }} lbs</td>
 									<td><img @click="deleteItem(item)" src="../assets/trash.svg" height="20" width="20"/></td>
 								</tr>
 							</tbody>
@@ -84,6 +84,7 @@ export default {
 				shouldUpdate: false,
 				isPantryModal: false,
 				isFridgeModal: false,
+				selectedFoods: []
 		};
 	},
 	components: {
@@ -143,6 +144,37 @@ export default {
 				return;
 			}
 		},
+		sortBy(value, param){
+			if(param === 'f'){
+				if(value === "name"){
+					this.fridgeData.sort((a, b) => (a.name > b.name) ? 1 : -1)
+				}
+				else {
+					this.fridgeData.sort((a, b) => (a.date > b.date) ? 1 : -1)
+				}
+			}
+			else {
+				if(value === "name"){
+					this.pantryData.sort((a, b) => (a.name > b.name) ? 1 : -1)
+				}
+				else {
+					this.pantryData.sort((a, b) => (a.date > b.date) ? 1 : -1)
+				}
+			}
+		},
+		selected(event){
+			let index = this.selectedFoods.indexOf(event.target.value)
+
+			if(index === -1){
+				//did not find it
+				this.selectedFoods = [...this.selectedFoods, event.target.value]
+			}
+			else {
+				//found it
+				this.selectedFoods.splice(index, 1)
+			}
+			console.log(this.selectedFoods)
+		}
 	},
 	mounted: async function(){
 			let token = getJwtToken()
@@ -192,10 +224,15 @@ h4 {
 .add-button {
 		position: absolute;
 		right: 2%;
+		cursor: pointer;
 }
 
 table {
 	width: 100%;
+}
+
+tr {
+  height: 30px !important;
 }
 
 td {

@@ -68,6 +68,7 @@ export default {
     handleLogin() {
       this.loading = true;
       this.message = "";
+      
       Api.login(this.username, this.password)
         .then((res) => {
           setJwtToken(res.data[0].token);

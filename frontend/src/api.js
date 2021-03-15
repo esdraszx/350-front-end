@@ -1,5 +1,5 @@
 import axios from "axios";
-import { authHeader, getJwtToken, getUserIdFromToken } from "./auth";
+import { authHeader } from "./auth";
 
 const API_URL = "http://192.168.50.64:3000";
 
@@ -75,44 +75,27 @@ class Api {
     })
   }
 
-  addArticle(article) {
-    return axios.post(
-      API_URL + "/articles",
-      {
-        ...article,
-        // add user id from JWT token
-        userid: getUserIdFromToken(getJwtToken()),
-      },
-      {
-        headers: authHeader(),
-      }
-    );
-  }
-
-  updateArticle(article) {
-    return axios.patch(
-      API_URL + `/articles?articleid=eq.${article.articleid}`,
-      article,
-      {
-        headers: authHeader(),
-      }
-    );
-  }
-
-  deleteArticle(id) {
-    return axios.delete(API_URL + `/articles?articleid=eq.${id}`, {
+  getAllUsers(){
+    return axios.get(API_URL + '/users', {
       headers: authHeader(),
-    });
+    })
   }
 
-  publishArticle(id) {
-    return axios.post(
-      API_URL + "/rpc/publish",
-      { id: id },
-      {
-        headers: authHeader(),
-      }
-    );
+  async editRoleUser(username, role){
+    await axios.patch(API_URL + `/users?username=eq.${username}`, {
+      "role": role
+    }, {
+      headers: authHeader(),
+    })
+    return;
+  }
+
+  editAdmin(username, role){
+    axios.patch(API_URL + `/users?username=eq.${username}`, {
+      "role": role
+    }, {
+      headers: authHeader(),
+    })
   }
 
   login(username, password) {

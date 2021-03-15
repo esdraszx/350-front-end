@@ -13,6 +13,7 @@
 
 <script>
 // import Api from "../api";
+import { deleteJwtToken } from  '../auth'
 import Header from "../components/Header"
 
 export default {
@@ -31,6 +32,7 @@ export default {
     //   this.articles = res.data;
     //   this.loading = false;
     // });
+    deleteJwtToken()
   },
 };
 </script>
