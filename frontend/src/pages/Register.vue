@@ -3,11 +3,6 @@
     <Header/>
     <br/>
     <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
       <form name="form" @submit.prevent="handleRegister">
         <div>
           <div class="form-group">
@@ -156,7 +151,7 @@ label {
 }
 
 .card {
-  background-color: #f7f7f7;
+  background-color: rgba(90, 95, 117, .85);
   padding: 20px 25px 30px;
   margin: 0 auto 25px;
   margin-top: 50px;
@@ -166,6 +161,11 @@ label {
   -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
   -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+label {
+  color: var(--lightP);
+  font-weight: 600;
 }
 
 .profile-img-card {
@@ -181,5 +181,22 @@ label {
 .alert-success {
   background-color: rgb(158, 233, 158);
   color: green;
+}
+
+button {
+  border: 2px solid var(--lightP) !important;
+  background-color: var(--lightP) !important;
+  border-radius: 4px !important;
+  color: var(--darkP) !important;
+  cursor: pointer;
+  transition: .5s ease;
+}
+
+button:hover {
+  border: 2px solid var(--darkP) !important;
+  background-color: var(--darkP) !important;
+  border-radius: 4px !important;
+  color: var(--lightP) !important;
+  font-weight: 600;
 }
 </style>

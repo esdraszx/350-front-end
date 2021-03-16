@@ -11,6 +11,7 @@
                 <!-- <li><router-link :to="`recipes`">Recipes</router-link></li> -->
                 <li v-if="isLogin"><router-link :to="`logout`" >Logout</router-link></li>
                 <li v-else><router-link :to="`login`" >Login</router-link></li>
+                <li v-if="!isLogin"><router-link :to="`register`" >Register</router-link></li>
                 <li id="last" v-if="isAdmin"><router-link :to="`admin`">Admin</router-link></li>
             </ul>
         </div>
@@ -57,7 +58,7 @@ export default {
 <style scoped>
 
 #header {
-    background-color:rgb(226, 226, 226);
+    background-color:var(--lightP);
     width: 100%;
     height: 75px;
     position: fixed;
@@ -99,7 +100,14 @@ export default {
 }
 
 a {
-    font-size: 17px !important;
+  font-weight: bold;
+  font-size: 17px !important;
+  color: var(--darkP) !important;
+}
+
+a:hover {
+  text-decoration: none;
+  text-shadow: 0px 0px 2px var(--shadeP);
 }
 
 #last {

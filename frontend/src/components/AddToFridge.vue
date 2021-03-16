@@ -1,26 +1,37 @@
 <template>
   <div class="f-modal-backdrop">
     <div class="f-modal">
-      <br/>
-      <h5>Add to Fridge</h5>
+      <h5>ADD TO FRIDGE</h5>
       <div class="f-modal-body">
-        <label>Name</label>
-        <input v-model="name" placeholder="Item name"/>
+        <div class="form-item">
+          <label>Name</label>
+          <input v-model="name" placeholder="Item name"/>
+        </div>
         <br/>
-        <label>Type</label>
-        <input v-model="type" placeholder="Item name"/>
+        <div class="form-item">
+          <label>Type</label>
+          <input v-model="type" placeholder="Item name"/>
+        </div>
         <br/>
-        <label>Date</label>
-        <input type="date" v-model="date" placeholder="Item date"/>
+        <div class="form-item">
+          <label>Date</label>
+          <input type="date" v-model="date" placeholder="Item date"/>
+        </div>
         <br/>
-        <label>Weight</label>
-        <input type="number" v-model="weight" placeholder="1 lb"/>lb
+        <div class="form-item"> 
+          <label>Weight (lbs)</label>
+          <input type="number" v-model="weight" placeholder="1 lb"/>
+        </div>
         <br/>
-        <label>Meat</label>
-        <input type="radio" id="true-m" value="1" v-model="isMeats">
+        <div class="form-item long">  
+          <label>Meat</label>
+          <input type="radio" id="true-m" value="1" v-model="isMeats">
+        </div>
         <br/>
-        <label>Fruit or Veggie</label>
-        <input type="radio" id="false-m" value="0" v-model="isMeats">
+        <div class="form-item long">  
+          <label>Fruit or Veggie</label>
+          <input type="radio" id="false-m" value="0" v-model="isMeats">
+        </div>
         <br/>
       </div>
       <div class="f-modal-buttons">
@@ -94,6 +105,15 @@
 </script>
 
 <style scoped>
+  h5 {
+    padding: 10px;
+    width: 100%;
+    background-color: var(--lightP);
+    color: var(--darkP);
+    font-weight: bold;
+    font-size: 17px;
+  }
+
   .f-modal-backdrop {
     position: fixed;
     top: 0;
@@ -109,8 +129,10 @@
   .f-modal {
     background-color: white;
     position: relative;
-    width: 30%;
+    width: 350px;
     height: 50%;
+    border: 2px solid var(--darkP);
+    border-radius: 4px;
   }
 
   h5 {
@@ -150,24 +172,48 @@
   }
 
   button {
-    border: 1px solid black;
+    border: 1px solid var(--darkP);
+    border-radius: 4px;
     width: 6rem;
     font-size: 16px;
     cursor: pointer;
     font-weight: bold;
-    color: #4AAE9B;
-    background: transparent;
+    color: var(--lightP);
+    background-color: var(--darkP);
     margin: 20px;
-  }
-
-  .btn-green {
-    color: white;
-    background: #4AAE9B;
-    border: 1px solid #4AAE9B;
-    border-radius: 2px;
   }
 
   /* * {
     border: 1px solid red;
   } */
+
+  .form-item {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    width: 100%;
+  }
+
+  .form-item label {
+    width: 40%;
+    text-align: right;
+    padding-right: 15px;
+  }
+
+  .form-item input {
+    width: 45%;
+    margin-right: auto;
+    border: none;
+    border-bottom: 2px solid var(--darkP);
+    outline: none;
+  }
+
+  .long label {
+    width: 60%;
+  }
+
+  .long input {
+    width: 30%;
+    margin-right: auto;
+  }
 </style>

@@ -4,6 +4,8 @@ import { authHeader } from "./auth";
 const API_URL = "http://192.168.50.64:3000";
 
 class Api {
+
+  //GETTERS
   getUserFridgeAndPantry(username) {
     return axios.get(API_URL + `/user_kitchen_list?username=eq.${username}`);
   }
@@ -36,6 +38,7 @@ class Api {
     return axios.get(API_URL + `/meats?id=eq.${id}`);
   }
 
+  //ADD FOODS
   addFV(item){
     axios.post(API_URL + '/fruits_vegetables', item,
     {
@@ -57,6 +60,26 @@ class Api {
     })
   }
 
+  //DELETE FOODS BY PANTRY OR FRIDGE ID
+  deleteAllFV(field, id){
+    axios.delete(API_URL + `/fruits_vegetables?${field}=eq.${id}`, {
+      headers: authHeader(),
+    })
+  }
+
+  deleteAllMeats(id){
+    axios.delete(API_URL + `/meats?fridgeid=eq.${id}`, {
+      headers: authHeader(),
+    })
+  }
+
+  deleteAllGO(id){
+    axios.delete(API_URL + `/grains_other?pantryid=eq.${id}`, {
+      headers: authHeader(),
+    })
+  }
+
+  //DELETE FOODS BY FOOD ID
   deleteFV(id){
     axios.delete(API_URL + `/fruits_vegetables?id=eq.${id}`, {
       headers: authHeader(),
@@ -75,6 +98,7 @@ class Api {
     })
   }
 
+  //USERS
   getAllUsers(){
     return axios.get(API_URL + '/users', {
       headers: authHeader(),
@@ -90,9 +114,11 @@ class Api {
     return;
   }
 
-  editAdmin(username, role){
-    axios.patch(API_URL + `/users?username=eq.${username}`, {
-      "role": role
+
+  //FUNCTIONS
+  deleteUser(username){
+    axios.post(API_URL + `/rpc/delete_single_user`, {
+      'username': username
     }, {
       headers: authHeader(),
     })

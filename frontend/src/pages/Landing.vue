@@ -54,6 +54,10 @@ button {
   font-size: 18px;
   font-weight: bold;
   margin: 20px;
+  border: 2px solid var(--darkP);
+  background-color: var(--darkP);
+  border-radius: 4px;
+  color: white;
 }
 
 </style>

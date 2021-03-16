@@ -6,7 +6,7 @@
 				<br/><br/>
 				<div id="inventory-container">
 					<div id="fridge">
-						<h4>Fridge<img src="../assets/add.svg" class="add-button" @click="isFridgeModal = true"/></h4>
+						<h4>Fridge <span v-if="fridgeData.length > 0" class="clear-button" @click="clearAllFridge(fridgeid)">&nbsp;Clear All</span> <img src="../assets/add.svg" class="add-button" @click="isFridgeModal = true"/></h4>
 						<table>
 							<thead>
 								<tr>
@@ -25,13 +25,13 @@
 									<td>{{ item.type !== null ? (item.type) : ('-')}}</td>
 									<td>{{ item.date }}</td>
 									<td>{{ item.weight }} lbs</td>
-									<td><img @click="deleteItem(item)" src="../assets/trash.svg" height="20" width="20"/></td>
+									<td><img class="button-img" @click="deleteItem(item)" src="../assets/trash-red.svg" height="20" width="20"/></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
 					<div id="pantry">
-						<h4>Pantry<img src="../assets/add.svg" class="add-button" @click="isPantryModal = true"/></h4>
+						<h4>Pantry <span v-if="pantryData.length > 0" class="clear-button" @click="clearAllPantry(pantryid)">&nbsp;Clear All</span> <img src="../assets/add.svg" class="add-button" @click="isPantryModal = true"/></h4>
 						<table>
 							<thead>
 								<tr>
@@ -50,7 +50,7 @@
 									<td>{{ item.type !== null ? (item.type) : ('-')}}</td>
 									<td>{{ item.date }}</td>
 									<td>{{ item.weight }} lbs</td>
-									<td><img @click="deleteItem(item)" src="../assets/trash.svg" height="20" width="20"/></td>
+									<td><img class="button-img" @click="deleteItem(item)" src="../assets/trash-red.svg" height="20" width="20"/></td>
 								</tr>
 							</tbody>
 						</table>
@@ -114,7 +114,7 @@ export default {
 			
 			setTimeout(() => {
 				this.getKitchenData()
-			}, 750);
+			}, 500);
 		},
 		async deleteItem(item){
 			//get FV and GO and M
@@ -174,7 +174,23 @@ export default {
 				this.selectedFoods.splice(index, 1)
 			}
 			console.log(this.selectedFoods)
-		}
+		},
+		async clearAllFridge(id){
+			if(confirm('Are you sure you want to delete all the food in your fridge?')){
+				await Api.deleteAllFV('fridgeid',id)
+				await Api.deleteAllMeats(id)
+				this.closeModal()
+			}
+			//clear all fruits and veg
+		},
+		async clearAllPantry(id){
+			if(confirm('Are you sure you want to delete all the food in your pantry?')){
+				await Api.deleteAllFV('pantryid',id)
+				await Api.deleteAllGO(id)
+				this.closeModal()
+			}
+			//clear all fruits and grains
+		},
 	},
 	mounted: async function(){
 			let token = getJwtToken()
@@ -204,7 +220,7 @@ div {
 }
 
 #fridge {
-	border-right: 1px solid black;
+	border-right: 2px solid var(--darkP);
 	padding-right: 10px;
 }
 
@@ -217,14 +233,18 @@ div {
 }
 
 h4 {
-		display: flex;
-		position: relative;
+	display: flex;
+	position: relative;
+	align-items: center;
+	color: var(--darkP);
+	border-bottom: 2px solid var(--darkP);
+	padding: 2px;
 }
 
 .add-button {
-		position: absolute;
-		right: 2%;
-		cursor: pointer;
+	position: absolute;
+	right: 2%;
+	cursor: pointer;
 }
 
 table {
@@ -235,13 +255,35 @@ tr {
   height: 30px !important;
 }
 
+thead {
+	border-bottom: 2px solid var(--shadeP);
+}
+
 td {
 	vertical-align: center;
-	border-bottom: 1px solid red;
+	border-bottom: 1px solid rgba(115, 139, 245, .3);
 }
 
 /* * {
 		border: black 1px solid;
 } */
 
+.clear-button {
+	font-size: 12px !important;
+	border: 1.5px solid #ff837a;
+	border-radius: 4px;
+	width: 4rem;
+	color: #ff837a;
+	padding: 3px;
+	margin-left: 5px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.clear-button:hover {
+	transition: .5s ease;
+	color: white;
+	font-weight: bold;
+	background-color: #ff837a;
+}
 </style>

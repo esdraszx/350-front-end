@@ -13,18 +13,22 @@
             <th>Name</th>
             <th>Username</th>
             <th>Role</th>
+            <th>Ban/Unban</th>
             <th>Delete</th>
           </tr>  
         </thead>
         <tbody>
           <tr v-for="(u, index) in users" :key="index">
-            <td><input type="radio" :value="index" v-model="selectedIndex"/></td>
-            <td>{{u.name}}</td>
-            <td>{{u.username}}</td>
-            <td :class="u.role < 1 ? ('admin-role') : (u.role === 1 ? ('user-role') : ('deleted'))" >{{u.role === 0 ? ('admin') : ( u.role === 1 ? ('user') : ('deleted') ) }}</td>
-            <td>
-              <img v-if="u.role !== 2" @click="deleteUser(u.username)" src="../assets/trash.svg" height="20" width="20"/>
-              <img v-else @click="recoverUser(u.username)" src="../assets/recover.svg" height="20" width="20"/>
+            <td v-if="u.username !== ''"><input type="radio" :value="index" v-model="selectedIndex"/></td>
+            <td v-if="u.username !== ''">{{u.name}}</td>
+            <td v-if="u.username !== ''">{{u.username}}</td>
+            <td v-if="u.username !== ''" :class="u.role < 1 ? ('admin-role') : (u.role === 1 ? ('user-role') : ('deleted'))" >{{u.role === 0 ? ('admin') : ( u.role === 1 ? ('user') : ('banned') ) }}</td>
+            <td v-if="u.username !== ''">
+              <img class="button-img" v-if="u.role !== 2" @click="banUser(u.username)" src="../assets/slash.svg" height="20" width="20"/>
+              <img class="button-img" v-else @click="recoverUser(u.username)" src="../assets/recover.svg" height="20" width="20"/>
+            </td> 
+            <td v-if="u.username !== ''">
+              <img class="button-img" @click="deleteUser(u.username)" src="../assets/trash-red.svg" height="20" width="20"/>
             </td>
           </tr>
         </tbody>
@@ -54,9 +58,13 @@ export default {
   },
   methods: {
     async deleteUser(username){
+      await Api.deleteUser(username)
+      this.getData()
+    },
+    async banUser(username){
       // let index = this.users.indexOf(username)
       // this.users.splice(index, 1)
-      console.log('clicked delete')
+      console.log('clicked ban')
       await Api.editRoleUser(username, 2)
       this.getData()
     },
@@ -69,13 +77,13 @@ export default {
     },
     async makeAdmin(){
       if(this.selectedIndex !== null){
-        await Api.editAdmin(this.users[this.selectedIndex].username, 0)
+        await Api.editRoleUser(this.users[this.selectedIndex].username, 0)
       }
       this.getData()
     },
     async revokeAdmin(){
       if(this.selectedIndex !== null){
-        await Api.editAdmin(this.users[this.selectedIndex].username, 1)
+        await Api.editRoleUser(this.users[this.selectedIndex].username, 1)
       }
       this.getData()
     },
@@ -92,6 +100,10 @@ export default {
 
 <style scoped>
 
+thead {
+  border-bottom: 2px solid var(--darkP);
+}
+
 tr {
   height: 30px !important;
 }
@@ -105,7 +117,20 @@ tr {
 }
 
 button {
+  width: 140px;
   margin: 10px;
+  border: 2px solid var(--shadeP);
+  border-radius: 4px;
+  color: var(--darkP);
+  transition: .5s ease;
+  cursor: pointer;
+  font-weight: 600;
+  height: 35px;
+  background-color: transparent;
+}
+
+button:hover {
+  background-color: var(--lightP);
 }
 
 .admin-role {

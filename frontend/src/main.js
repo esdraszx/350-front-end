@@ -10,9 +10,6 @@ import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Register from "./pages/Register";
 import NotFound from "./components/NotFound"
-import AdminArticleAdd from "./components/AdminArticleAdd";
-import AdminArticleList from "./components/AdminArticleList";
-import AdminArticleEdit from "./components/AdminArticleEdit";
 
 Vue.config.productionTip = false;
 
@@ -49,9 +46,6 @@ const router = new VueRouter({
       component: Admin,
       beforeEnter: checkAuth,
       children: [
-        { path: "add", component: AdminArticleAdd },
-        { path: "edit/:id", component: AdminArticleEdit },
-        { path: "", component: AdminArticleList },
       ],
     },
     { path: '*', component: NotFound }

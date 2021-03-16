@@ -3,11 +3,6 @@
     <Header/>
     <br/>
     <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
       <form name="form" @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="username">Username</label>
@@ -99,7 +94,7 @@ label {
 }
 
 .card {
-  background-color: #f7f7f7;
+  background-color: rgba(90, 95, 117, .85);
   padding: 20px 25px 30px;
   margin: 0 auto 25px;
   margin-top: 50px;
@@ -119,5 +114,26 @@ label {
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
+}
+
+label {
+  color: var(--lightP);
+  font-weight: 600;
+}
+
+button {
+  border: 2px solid var(--lightP);
+  background-color: var(--lightP);
+  border-radius: 4px;
+  color: var(--darkP);
+  transition: .5s ease;
+}
+
+button:hover {
+  border: 2px solid var(--darkP);
+  background-color: var(--darkP);
+  border-radius: 4px;
+  color: var(--lightP);
+  font-weight: 600;
 }
 </style>
