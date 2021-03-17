@@ -38,24 +38,71 @@ class Api {
     return axios.get(API_URL + `/meats?id=eq.${id}`);
   }
 
+  getRecipes(username){
+    return axios.get(API_URL + `/recipes?username=eq.${username}`, {
+      headers: authHeader()
+    });
+  }
+
   //ADD FOODS
-  addFV(item){
-    axios.post(API_URL + '/fruits_vegetables', item,
-    {
-      headers: authHeader(),
-    })
+  async addFV(item){
+    try {
+      await axios.post(API_URL + '/fruits_vegetables', item,
+      {
+        headers: authHeader(),
+      })
+      return ''
+    }
+    catch (e) {
+      return 'Something went wrong. Some fields might be missing'
+    }
   }
 
   addMeat(item){
-    axios.post(API_URL + '/meats', item,
+    try {
+      axios.post(API_URL + '/meats', item,
     {
       headers: authHeader(),
     })
+    }
+    catch (e) {
+      console.log(e)
+    }
   }
 
-  addGO(item){
-    axios.post(API_URL + '/grains_other', item,
-    {
+  addGO(item){ 
+    try {
+      let response = axios.post(API_URL + '/grains_other', item,
+      {
+        headers: authHeader(),
+      })
+
+      console.log(response)
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+
+  //SAVE RECIPE
+  async saveRecipe(item){ 
+    try {
+      let response = await axios.post(API_URL + '/recipes', item,
+      {
+        headers: authHeader(),
+      })
+
+      console.log(response)
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
+
+  //DELETE RECIPE
+  deleteRecipe(id){
+    console.log(id)
+    axios.delete(API_URL + `/recipes?id=eq.${id}`, {
       headers: authHeader(),
     })
   }

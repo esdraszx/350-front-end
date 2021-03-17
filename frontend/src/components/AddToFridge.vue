@@ -32,7 +32,7 @@
           <label>Fruit or Veggie</label>
           <input type="radio" id="false-m" value="0" v-model="isMeats">
         </div>
-        <br/>
+        <p id="message">{{ message }}</p>
       </div>
       <div class="f-modal-buttons">
         <button type="button" class="btn-close" @click="close">Cancel</button>
@@ -55,6 +55,7 @@
         date: '',
         weight: 0,
         isMeats: 0,
+        message: '',
         //if meats is 1 then add to meat. Else, add to fruits
       }
     },
@@ -65,6 +66,7 @@
         this.date = ''
         this.weight= 0
         this.isMeats = 0
+        this.message = ''
         this.$emit('close');
       },
       formatDate(date) {
@@ -80,7 +82,9 @@
 
         return [year, month, day].join('-');
       },
-      addItem(){
+      async addItem(){
+        let response = ''
+
         let item = {
           "name": this.name,
           "type": this.type,
@@ -92,12 +96,18 @@
 
         if(this.isMeats === 1){
           //add Meat
-          Api.addGO(item)
+          response = await Api.addGO(item)
         }
         else {
           //add FV
-          Api.addFV(item)
+          response = await Api.addFV(item)
         }
+
+        if(response !== ''){
+          this.message = response
+          return;
+        }
+
         this.close()
       }
     },
@@ -130,7 +140,7 @@
     background-color: white;
     position: relative;
     width: 350px;
-    height: 50%;
+    height: 55%;
     border: 2px solid var(--darkP);
     border-radius: 4px;
   }
@@ -215,5 +225,11 @@
   .long input {
     width: 30%;
     margin-right: auto;
+  }
+
+  #message {
+    color: rgb(156, 31, 31);
+    font-size: 15px;
+    margin-top: -10px;
   }
 </style>

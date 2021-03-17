@@ -4,6 +4,13 @@
 		<div class="content">
 			<div v-if="username !== ''">
 				<br/><br/>
+				<div id="ingredients">
+					<p><b>Recipe ingredients: </b>
+						<span v-for="(i, index) in selectedFoods" :key="i + 1">&nbsp;{{ index === selectedFoods.length - 1 ? (`${i}&nbsp;`) : (`${i}&nbsp;-`)}} </span>
+					</p>
+					<router-link id="search" :to="`/recipes/${JSON.stringify(selectedFoods)}`"><img src="../assets/search.svg" width="20"/>Search</router-link>
+				</div>
+				<br/>
 				<div id="inventory-container">
 					<div id="fridge">
 						<h4>Fridge <span v-if="fridgeData.length > 0" class="clear-button" @click="clearAllFridge(fridgeid)">&nbsp;Clear All</span> <img src="../assets/add.svg" class="add-button" @click="isFridgeModal = true"/></h4>
@@ -93,16 +100,17 @@ export default {
 		FridgeModal
 	},
 	methods: {
-		async getKitchenData(){
+		async getFridgeData(){
 			// this.fridgeData = null
 			// this.pantryData = null
-			console.log('getting new data')
+			// console.log('getting new data')
 			//get fridge fv and meats
 			let fridgeFvData = await Api.getFridgeFV(this.fridgeid)
 			let fridgeMData = await Api.getFridgeMeats(this.fridgeid)
 			// console.log(fridgeFvData)
 			this.fridgeData = [...fridgeFvData.data, ...fridgeMData.data]
-
+		},
+		async getPantryData(){
 			let pantryFvData = await Api.getPantryFV(this.pantryid)
 			let pantryGoData = await Api.getPantryGO(this.pantryid)
 			
@@ -113,7 +121,8 @@ export default {
 			this.isFridgeModal = false
 			
 			setTimeout(() => {
-				this.getKitchenData()
+				this.getFridgeData()
+				this.getPantryData()
 			}, 500);
 		},
 		async deleteItem(item){
@@ -132,7 +141,7 @@ export default {
 			if(response.data[0] !== undefined && response.data[0].name === item.name){
 				console.log(response.data[0], 'belongs to GO')
 				await Api.deleteGO(item.id)
-				this.closeModal()
+				this.getPantryData()
 				return;
 			}
 			
@@ -140,7 +149,7 @@ export default {
 			if(response.data[0] !== undefined && response.data[0].name === item.name){
 				console.log(response.data[0], 'belongs to M')
 				await Api.deleteMeats(item.id)
-				this.closeModal()
+				this.getFrdigeData()
 				return;
 			}
 		},
@@ -179,7 +188,7 @@ export default {
 			if(confirm('Are you sure you want to delete all the food in your fridge?')){
 				await Api.deleteAllFV('fridgeid',id)
 				await Api.deleteAllMeats(id)
-				this.closeModal()
+				this.getFrdigeData()
 			}
 			//clear all fruits and veg
 		},
@@ -187,12 +196,12 @@ export default {
 			if(confirm('Are you sure you want to delete all the food in your pantry?')){
 				await Api.deleteAllFV('pantryid',id)
 				await Api.deleteAllGO(id)
-				this.closeModal()
+				this.getPantryData()
 			}
 			//clear all fruits and grains
 		},
 	},
-	mounted: async function(){
+	created: async function(){
 			let token = getJwtToken()
 			if(token === null){
 					return;
@@ -208,7 +217,8 @@ export default {
 			this.fridgeid = response.data[0].fridge_id
 			this.pantryid = response.data[0].pantry_id
 
-			this.getKitchenData()
+			this.getFridgeData()
+			this.getPantryData()
 	},
 };
 </script>
@@ -287,6 +297,37 @@ td {
 	background-color: #ff837a;
 }
 
+#ingredients {
+	display: flex;
+	align-items: center;
+	background-color: rgba(90, 95, 117, .9);
+	height: 45px;
+	border-radius: 40px;
+}
+
+#search {
+	height: 30px;
+	width: auto;
+	position: absolute;
+	right: 10px;
+	display: flex;
+	align-items: center;
+	border: 2px solid var(--lightP);
+	color: var(--darkP);
+	background-color: var(--lightP);
+	border-radius: 20px;
+}
+
+a:hover {
+	text-decoration: none !important;
+}
+
+#ingredients p {
+	color: var(--lightP);
+	margin-left: 15px !important;
+	margin: auto 0px auto 0px;
+}
+
 @media only screen and (max-width: 1000px) {
 	#inventory-container {
 		flex-direction: column;
@@ -300,6 +341,24 @@ td {
 	#fridge {
 		border: none;
 		padding: 0px;
+	}
+
+	#ingredients {
+		height: 100px;
+		align-items: baseline !important;
+		text-align: center;
+		justify-content: center;
+		border-radius: 10px;
+	}
+
+	#ingredients p {
+		margin: 10px 0px 0px 0px;
+		text-align: center;
+	}
+
+	#search {
+		right: inherit;
+		top: 115px;
 	}
 }
 </style>

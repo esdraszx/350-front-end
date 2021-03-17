@@ -9,6 +9,7 @@ import Admin from "./pages/Admin";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Register from "./pages/Register";
+import Recipes from "./pages/Recipes";
 import NotFound from "./components/NotFound"
 
 Vue.config.productionTip = false;
@@ -36,11 +37,13 @@ const checkAuth = function(to, _, next) {
 
 const router = new VueRouter({
   routes: [
+    { path: "/", component: Landing },
     { path: "/landing", component: Landing },
     { path: "/home", component: Home, beforeEnter: checkAuth },
     { path: "/login", component: Login },
     { path: "/logout", component: Logout },
     { path: "/register", component: Register },
+    { path: "/recipes/:ing", component: Recipes, props: true },
     {
       path: "/admin",
       component: Admin,

@@ -32,7 +32,7 @@
           <label>Fruit or Veggie</label>
           <input type="radio" id="false-m" value="0" v-model="isGrain">
         </div>
-        <br/>
+        <p id="message">{{ message }}</p>
       </div>
       <div class="p-modal-buttons">
         <button type="button" class="btn-close" @click="close">Cancel</button>
@@ -55,6 +55,7 @@
         date: '',
         weight: 0,
         isGrain: 0,
+        message: '',
         //if grain is 1 then add to grains. Else, add to fruits
       }
     },
@@ -65,6 +66,7 @@
         this.date = ''
         this.weight= 0
         this.isGrain = 0
+        this.message = ''
         this.$emit('close');
       },
       formatDate(date) {
@@ -80,9 +82,11 @@
 
         return [year, month, day].join('-');
       },
-      addItem(){
+      async addItem(){
         //console.log(this.id)
         //find if we are adding a GO or FV
+        let response = ''
+
         let item = {
           "name": this.name,
           "type": this.type,
@@ -94,13 +98,19 @@
 
         if(this.isGrain === 1){
           //add grain
-         
-          Api.addGO(item)
+        
+          response = await Api.addGO(item)
         }
         else {
           //add FV
-          Api.addFV(item)
+          response = await Api.addFV(item)
         }
+
+        if(response !== ''){
+          this.message = response
+          return;
+        }
+
         this.close()
       }
     },
@@ -133,7 +143,7 @@
     background-color: white;
     position: relative;
     width: 350px;
-    height: 50%;
+    height: 55%;
     border: 2px solid var(--darkP);
     border-radius: 4px;
   }
@@ -201,5 +211,11 @@
   .long input {
     width: 30%;
     margin-right: auto;
+  }
+
+  #message {
+    color: rgb(156, 31, 31);
+    font-size: 15px;
+    margin-top: -10px;
   }
 </style>
