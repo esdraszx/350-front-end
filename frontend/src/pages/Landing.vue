@@ -27,11 +27,6 @@ export default {
     Header
   },
   created: function () {
-    // this.loading = true;
-    // Api.getArticles().then((res) => {
-    //   this.articles = res.data;
-    //   this.loading = false;
-    // });
     deleteJwtToken()
   },
 };

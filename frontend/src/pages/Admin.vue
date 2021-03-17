@@ -13,8 +13,8 @@
             <th>Name</th>
             <th>Username</th>
             <th>Role</th>
-            <th>Ban/Unban</th>
-            <th>Delete</th>
+            <th>Ban</th>
+            <th>&nbsp;</th>
           </tr>  
         </thead>
         <tbody>
@@ -113,7 +113,7 @@ tr {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px;
+  margin: 20px 0px 20px 0px;
 }
 
 button {

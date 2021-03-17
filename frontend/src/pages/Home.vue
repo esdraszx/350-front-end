@@ -229,7 +229,7 @@ div {
 }
 
 #inventory-container {
-		display: flex;
+	display: flex;
 }
 
 h4 {
@@ -285,5 +285,21 @@ td {
 	color: white;
 	font-weight: bold;
 	background-color: #ff837a;
+}
+
+@media only screen and (max-width: 1000px) {
+	#inventory-container {
+		flex-direction: column;
+	}
+
+	#pantry {
+		padding: 0px;
+		margin-top: 20px;
+	}
+
+	#fridge {
+		border: none;
+		padding: 0px;
+	}
 }
 </style>

@@ -2,8 +2,12 @@
   <div id="header">
     <div id="header-container">
         <div id="logo">
-            <router-link :to="`/`" v-if="isLogin === false">Landing</router-link>
-            <router-link :to="`/home`" v-else>Home</router-link>
+            <router-link v-if="isLogin === false" id="logo-container" :to="`/landing`"><img id="logo-img" width="72" src="../assets/icon.png"/></router-link>
+            <router-link v-else id="logo-container" :to="`/home`"><img id="logo-img" width="72" src="../assets/icon.png"/></router-link>
+        </div>
+        <div id="brand">
+          <!-- <h1>Kitchen Tracker</h1> -->
+          <img src="../assets/logo_name.png" height="90"/>
         </div>
         <div id="menu">
             <ul>
@@ -32,6 +36,9 @@ export default {
     };
   },
   methods:{
+    goHome(cPath){
+      this.$router.push({ path: cPath })
+    },
   },
   created: function(){
       let token = getJwtToken()
@@ -60,7 +67,7 @@ export default {
 #header {
     background-color:var(--lightP);
     width: 100%;
-    height: 75px;
+    height: 100px;
     position: fixed;
     top: 0px;
     right: 0px;
@@ -80,18 +87,21 @@ export default {
 #logo {
     position: absolute;
     left: 1%;
+    width: 50px;
 }
 
 #menu {
     height: 100%;
     position: absolute;
     right: 1%;
+    display: flex;
+    align-items: center;
 }
 
 #menu ul {
-    height: 100%;
     display: flex;
     align-items: center;
+    margin: 50px 0px 0px 0px;
 }
 
 #menu ul li {
@@ -114,5 +124,44 @@ a:hover {
     margin-right: 0px !important;
 }
 
+#brand {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+}
 
+#logo-container {
+  /* border: 1px solid red; */
+  position: relative;
+  height: 100px;
+  width: 100%;
+  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#logo-img {
+  position: fixed;
+  border: 0px solid black;
+  top: calc(0 - 200px);
+}
+
+@media only screen and (max-width: 1000px) {
+  #brand {
+    display: none;
+  }
+
+  #menu ul {
+    flex-direction: column;
+    margin-top: 0px;
+    height: auto;
+  }
+
+  #menu ul li {
+    margin: 0px !important;
+    margin-top: 5px !important;
+  }
+}
 </style>

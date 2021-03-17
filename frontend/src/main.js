@@ -36,7 +36,7 @@ const checkAuth = function(to, _, next) {
 
 const router = new VueRouter({
   routes: [
-    { path: "/", component: Landing },
+    { path: "/landing", component: Landing },
     { path: "/home", component: Home, beforeEnter: checkAuth },
     { path: "/login", component: Login },
     { path: "/logout", component: Logout },

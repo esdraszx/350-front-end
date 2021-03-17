@@ -1,8 +1,8 @@
 <template>
   <div class="col-md-12">
     <Header/>
-    <br/>
-    <div class="card card-container">
+    <br/><br/>
+    <div class="card card-container content">
       <form name="form" @submit.prevent="handleRegister">
         <div>
           <div class="form-group">

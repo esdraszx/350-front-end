@@ -1,8 +1,8 @@
 <template>
   <div class="col-md-12">
     <Header/>
-    <br/>
-    <div class="card card-container">
+    <br/><br/>
+    <div class="card card-container content">
       <form name="form" @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="username">Username</label>
