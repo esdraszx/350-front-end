@@ -18,7 +18,7 @@ export default {
 :root {
   --darkP: #374375;
   --lightP: #BEC8F7;
-  --centerP: #738BF5;
+  --centerP: #73c5f5;
   --grayP: #5A5F75;
   --shadeP: #5B6EC2;
 }
