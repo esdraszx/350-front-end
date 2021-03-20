@@ -125,10 +125,12 @@ export default {
     async getMyRecipes(){
         this.loading = true
         let response = await Api.getRecipes(getUserIdFromToken(this.token));
-        this.savedRecipes = response.data
-        this.savedRecipes.forEach((item, index) => {
-        this.savedRecipes[index].recipe = JSON.parse(item.recipe)
-        
+        let temp = response.data
+        temp.forEach((item, index) => {
+        temp[index].recipe = JSON.parse(item.recipe)
+
+        this.savedRecipes = temp
+
         setTimeout(() => {
             this.loading = false
         }, 1000);
