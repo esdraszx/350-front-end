@@ -159,7 +159,7 @@ a:hover {
 #logo-img {
   position: fixed;
   border: 0px solid black;
-  top: calc(0 - 200px);
+  top: 0px;
 }
 
 .active a {
