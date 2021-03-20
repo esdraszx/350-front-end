@@ -7,7 +7,7 @@ The server will be using **nginx**
 
 ## Prepare Nginx
 
-...
+...bash
 npm install nginx
 ...
 
