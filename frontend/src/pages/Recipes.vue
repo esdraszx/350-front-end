@@ -98,9 +98,11 @@ export default {
         this.getMyRecipes();
     },
     async deleteRecipe(id){
-        let response = await Api.deleteRecipe(id)
-        console.log(response)
-        this.getMyRecipes()
+        let index = this.savedRecipes.findIndex((item) => item.id === id)
+        await Api.deleteRecipe(id)
+        this.savedRecipes.splice(index, 1)
+        // console.log(index)
+        // this.getMyRecipes()
     },
     async searchResults(){
         this.ingredients = JSON.parse(this.$route.params.ing)
@@ -113,7 +115,7 @@ export default {
             const url = "https://api.edamam.com/search?q=" + str + "&app_id=" + this.app_id + "&app_key=" + this.APIKEY;
             this.recipes = await fetch(url, {mode: 'cors'}).then(async function(response) {
                 let json = await response.json()
-                console.log(json)
+                // console.log(json)
                 return json.hits
             })
         }
@@ -196,7 +198,7 @@ button {
   border: 2px solid var(--shadeP);
   border-radius: 4px;
   color: var(--darkP);
-  transition: .5s ease;
+  transition: .2s ease;
   cursor: pointer;
   font-weight: 600;
   height: 35px;
@@ -211,6 +213,11 @@ button {
     right: 5px;
     bottom: 5px;
     margin: 5px;
+}
+
+button:active {
+    color: white;
+    background-color: var(--darkP) !important;
 }
 
 button:hover {

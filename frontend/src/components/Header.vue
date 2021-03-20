@@ -164,10 +164,11 @@ a:hover {
 
 .active a {
   color: black !important;
-  padding-bottom: 50px;
+  padding-bottom: 14px;
   font-weight: bolder;
   background-color: rgba(255, 255, 255, 1);
-  border-radius: 3px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 
 @media only screen and (max-width: 1000px) {
@@ -195,6 +196,12 @@ a:hover {
   #menu ul li {
     margin-top: 5px !important;
   }
+
+  
+  .active a {
+    color: black !important;
+    padding-bottom: 36px;
+}
 }
 
 @media only screen and (max-width: 1600px){

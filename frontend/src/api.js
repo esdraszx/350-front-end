@@ -87,12 +87,12 @@ class Api {
   //SAVE RECIPE
   async saveRecipe(item){ 
     try {
-      let response = await axios.post(API_URL + '/recipes', item,
+      await axios.post(API_URL + '/recipes', item,
       {
         headers: authHeader(),
       })
 
-      console.log(response)
+      // console.log(response)
     }
     catch (e) {
       console.log(e)
@@ -101,7 +101,6 @@ class Api {
 
   //DELETE RECIPE
   deleteRecipe(id){
-    console.log(id)
     axios.delete(API_URL + `/recipes?id=eq.${id}`, {
       headers: authHeader(),
     })
