@@ -100,6 +100,7 @@ export default {
     async deleteRecipe(id){
         let response = await Api.deleteRecipe(id)
         console.log(response)
+        this.getMyRecipes()
     },
     async searchResults(){
         this.ingredients = JSON.parse(this.$route.params.ing)
