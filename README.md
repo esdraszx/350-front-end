@@ -54,5 +54,5 @@ sudo service nginx reload
 
 The command **npm run build** builds a destination folder that it will have an index.html file that we will render using nginx
 
-If you to go **http://server_address** you should have the front end page.
+If you to go **http://server_address** you should have the front end page and will be able to view everything.
 
